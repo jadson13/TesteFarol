@@ -1,0 +1,13 @@
+Pasta DADOS
+===========
+Aqui ficam as planilhas que alimentam o farol. Você NÃO precisa mexer aqui
+à mão: use o botão "Importar bases" no próprio dashboard (site). Ele sobe
+as planilhas para cá e o GitHub gera o farol novo sozinho.
+
+Nomes usados:
+  viagens.xlsx        -> substitui a cada importação (Frota Legal)
+  equipamentos.xlsx   -> substitui a cada importação (combustível)
+  prontuario.xlsx     -> substitui a cada importação (documentos)
+  inspecoes_AAAAMMDD-HHMMSS.xlsx -> ACUMULA (um por importação de inspeções)
+
+Atualização COMPLETA = as 4 bases.  Só AUDITORIA = inspeções+equipamentos+prontuário.
