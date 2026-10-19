@@ -120,7 +120,19 @@ def read_dados(dados_dir):
              if not os.path.basename(f).startswith("~$")]
     kinds = {f: _sniff_kind(f) for f in files}
     viagens = [f for f, k in kinds.items() if k == "viagens"]
-    inspec  = sorted(f for f, k in kinds.items() if k == "inspecoes")
+    # inspecoes: ordena do export MAIS RECENTE para o mais antigo, para que na
+    # deduplicacao (mantem a 1a ocorrencia) a versao mais nova de uma inspecao
+    # vença as versoes antigas de exports acumulados que se sobrepoem.
+    # Chave de recencia = data AAAAMMDD embutida no nome (ex.: inspecoes_20261019-083658);
+    # nomes sem data (ex.: a ponte "inspecoes_historico_...") contam como mais antigos.
+    def _insp_recency(f):
+        b = os.path.basename(f)
+        m = re.search(r'(\d{8})(?:-(\d{6}))?', b)   # data e (opcional) hora do nome gerado pelo botao
+        if m:
+            return (m.group(1), m.group(2) or "000000", b)
+        return ("00000000", "000000", b)
+    inspec  = sorted((f for f, k in kinds.items() if k == "inspecoes"),
+                     key=_insp_recency, reverse=True)
     equips  = [f for f, k in kinds.items() if k == "equipamentos"]
     pronts  = [f for f, k in kinds.items() if k == "prontuario"]
     newest = lambda xs: sorted(xs, key=os.path.getmtime, reverse=True)[0] if xs else None
